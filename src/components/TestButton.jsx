@@ -2,7 +2,7 @@ import { chaosFetch } from "../chaos-engine/chaosFetch";
 import useChaosStore from "../store/useChaosStore";
 
 export default function TestButton() {
-  const { url, method } = useChaosStore();
+  const { url, method, body } = useChaosStore();
 
   const testAPI = async () => {
     if (!url) {
@@ -10,9 +10,47 @@ export default function TestButton() {
       return;
     }
 
+    const options = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
     try {
-      const res = await chaosFetch(url, { method });
-      const data = await res.json();
+      if (method === "POST" || method === "PUT") {
+        if (!body) {
+          alert(`${method} request requires a body`);
+          return;
+        }
+
+        try {
+          JSON.parse(body);
+        } catch {
+          alert("Invalid JSON body");
+          return;
+        }
+
+        options.body = body;
+      }
+
+      if (method === "DELETE" && body) {
+        options.body = body;
+      }
+
+      const res = await chaosFetch(url, options);
+
+      let data;
+
+      const contentType = res.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = await res.text();
+      }
+
+      console.log("Response:", data);
     } catch (err) {
       console.error(err.message);
     }

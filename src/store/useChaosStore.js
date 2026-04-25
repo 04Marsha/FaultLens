@@ -7,11 +7,22 @@ const useChaosStore = create((set) => ({
 
   url: "",
   method: "GET",
+  body: "",
+  headers: { "Content-Type": "application/json" },
 
   logs: [],
+  selectedLog: null,
 
   setUrl: (url) => set({ url: url }),
-  setMethod: (method) => set({ method: method }),
+  setMethod: (method) =>
+    set(() => ({
+      method,
+      body: method === "GET" ? "" : "",
+    })),
+  setBody: (body) => set({ body }),
+  setSelectedLog: (log) => set({ selectedLog: log }),
+  clearSelectedLog: () => set({ selectedLog: null }),
+
   setLatency: (value) => set({ latency: value }),
   setErrorRate: (value) => set({ errorRate: value }),
   toggleOffline: () => set((state) => ({ isOffline: !state.isOffline })),

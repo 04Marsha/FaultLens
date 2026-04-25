@@ -2,6 +2,7 @@ import "./App.css";
 import ControlPanel from "./components/ControlPanel";
 import RequestMonitor from "./components/RequestMonitor";
 import RequestBuilder from "./components/RequestBuilder";
+import RequestInspector from "./components/RequestInspector";
 
 function App() {
   return (
@@ -30,22 +31,6 @@ function App() {
         <div className="relative z-10 w-full flex justify-center">
           <RequestBuilder />
         </div>
-
-        <div className="absolute top-1/2 inset-x-0 h-px bg-acid/5" />
-        <div className="absolute left-1/2 inset-y-0 w-px bg-acid/5" />
-      </div>
-
-      <div className="flex-1 relative overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(212,255,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,255,0,0.04) 1px,transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-        <div className="absolute top-1/2 inset-x-0 h-px bg-acid/5" />
-        <div className="absolute left-1/2 inset-y-0 w-px bg-acid/5" />
       </div>
 
       <div className="h-64 md:h-82 border-t border-border flex shrink-0">
@@ -72,6 +57,17 @@ function App() {
         </div>
       </div>
 
+      <div className="h-[35%] max-h-75 flex-1 relative overflow-hidden">
+        <div
+          className="relative inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(212,255,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,255,0,0.04) 1px,transparent 1px)",
+            backgroundSize: "40px 40px", 
+          }}
+        />
+        <RequestInspector />
+      </div>
       <div className="h-0.5 bg-acid shrink-0" />
     </div>
   );

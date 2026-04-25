@@ -1,7 +1,8 @@
 import useChaosStore from "../store/useChaosStore";
+import { getStatusText } from "../utils/statusMapper";
 
 export default function RequestMonitor() {
-  const { logs, clearLogs } = useChaosStore();
+  const { logs, clearLogs, setSelectedLog, selectedLog } = useChaosStore();
   return (
     <div className="h-full flex flex-col bg-surface text-xs font-mono">
       <div className="flex justify-between items-center px-4 py-2 border-b border-border">
@@ -31,13 +32,24 @@ export default function RequestMonitor() {
         {logs.map((log) => (
           <div
             key={log.id}
-            className="grid grid-cols-5 px-4 py-2 border-b border-border/40 hover:bg-[#0d1314] transition-colors duration-100 items-center"
+            onClick={() => setSelectedLog(log)}
+            className={`grid grid-cols-5 px-4 py-2 border-b border-border/40 cursor-pointer transition-colors duration-100 items-center
+              ${selectedLog?.id === log.id ? "bg-acid/10" : "hover:bg-[#0d1314]"}`}
           >
             <span
-              className={`text-[16px] tracking-widest uppercase font-display
-            ${log.status === "success" ? "text-acid" : "text-danger"}`}
+              className={`text-[16px] tracking-widest uppercase font-display ${
+                typeof log.status === "number"
+                  ? log.status >= 200 && log.status < 300
+                    ? "text-acid"
+                    : log.status >= 400 && log.status < 500
+                      ? "text-warn"
+                      : "text-danger"
+                  : "text-danger"
+              }`}
             >
-              {log.status}
+              {typeof log.status === "number"
+                ? `${log.status} ${getStatusText(log.status)}`
+                : "ERR"}
             </span>
 
             <span
@@ -63,9 +75,15 @@ export default function RequestMonitor() {
             </span>
 
             <span
-              className={`truncate ${log.errorMessage ? "text-danger" : "text-light"}`}
+              className={`truncate ${
+                typeof log.status === "number" && log.status >= 400
+                  ? "text-danger"
+                  : log.errorMessage
+                    ? "text-danger"
+                    : "text-light"
+              }`}
             >
-              {log.errorMessage || "OK"}
+              {getStatusText(log.status, log.errorMessage)}
             </span>
           </div>
         ))}
