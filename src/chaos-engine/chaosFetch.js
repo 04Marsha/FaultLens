@@ -97,6 +97,8 @@ export async function chaosFetch(url, options = {}) {
       id: crypto.randomUUID(),
       url,
       method: options.method || "GET",
+      headers: options.headers || {},
+      body: options.body || null,
       status: httpStatus ?? (status === "error" ? "ERR" : "OK"),
       errorMessage,
       response: response ? await safeParse(response) : null,

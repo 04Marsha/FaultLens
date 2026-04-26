@@ -2,7 +2,7 @@ import { chaosFetch } from "../chaos-engine/chaosFetch";
 import useChaosStore from "../store/useChaosStore";
 
 export default function TestButton() {
-  const { url, method, body } = useChaosStore();
+  const { url, method, body, headers } = useChaosStore();
 
   const testAPI = async () => {
     if (!url) {
@@ -10,11 +10,22 @@ export default function TestButton() {
       return;
     }
 
+    let parsedHeaders = {};
+
+    try {
+      if (!headers.trim()) {
+        parsedHeaders = {};
+      } else {
+        parsedHeaders = JSON.parse(headers);
+      }
+    } catch {
+      alert("Invalid Headers JSON");
+      return;
+    }
+
     const options = {
       method,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: parsedHeaders,
     };
 
     try {
@@ -61,9 +72,9 @@ export default function TestButton() {
       onClick={testAPI}
       className="
         flex items-center gap-2
-        px-6 py-2.5
+        px-2 py-1.5
         bg-acid text-surface
-        text-sm tracking-[0.2em] uppercase
+        text-[18px] tracking-[0.2em] uppercase
         border border-acid
         hover:bg-transparent hover:text-acid
         active:scale-95

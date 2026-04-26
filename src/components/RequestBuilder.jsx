@@ -3,7 +3,7 @@
 
 // POST REQUEST
 // https://jsonplaceholder.typicode.com/posts
-// BODY: {
+// {
 //   "title": "hello",
 //   "body": "world",
 //   "userId": 1
@@ -25,20 +25,43 @@ import TestButton from "./TestButton";
 import useChaosStore from "../store/useChaosStore";
 
 export default function RequestBuilder() {
-  const { url, method, body, setUrl, setMethod, setBody } = useChaosStore();
+  const {
+    url,
+    method,
+    body,
+    headers,
+    setUrl,
+    setMethod,
+    setBody,
+    setHeaders,
+    addSavedRequest,
+  } = useChaosStore();
+
+  const handleSave = () => {
+    if (!url) return alert("Enter URL first");
+
+    addSavedRequest({
+      id: crypto.randomUUID(),
+      url,
+      method,
+      body,
+      headers,
+      createdAt: new Date().toLocaleDateString(),
+    });
+  };
 
   return (
-    <div className="max-h-3/5 w-[90%] max-w-7xl flex flex-col gap-3">
-      <div className="w-full flex items-center gap-3 bg-[#0d1314] border border-border px-3 py-2 rounded-md">
+    <div className="h-full w-[90%] max-w-7xl flex flex-col gap-3">
+      <div className="w-full h-1/5 flex items-center gap-3 bg-[#0d1314] border border-border px-3 py-2 rounded-md">
         <select
           value={method}
           onChange={(e) => setMethod(e.target.value)}
           className="bg-panel text-acid font-display outline-none"
         >
-          <option>GET</option>
-          <option>POST</option>
-          <option>PUT</option>
-          <option>DELETE</option>
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
         </select>
 
         <input
@@ -49,14 +72,32 @@ export default function RequestBuilder() {
           className="flex-1 bg-transparent outline-none text-sm"
         />
         <TestButton />
+        <button
+          onClick={handleSave}
+          className="px-2 py-1.5 border border-acid text-acid hover:bg-acid/10 font-mono"
+        >
+          SAVE REQUEST
+        </button>
+      </div>
+      <div className="w-full bg-[#0d1314] border border-border px-3 py-2 rounded-md">
+        <label className="text-xs text-acid uppercase tracking-widest">
+          Headers
+        </label>
+
+        <textarea
+          placeholder='{"Authorization": "Bearer token"}'
+          value={headers}
+          onChange={(e) => setHeaders(e.target.value)}
+          className="w-full mt-2 bg-transparent outline-none text-sm font-mono"
+        />
       </div>
       {method !== "GET" && method !== "DELETE" && (
-        <div className="max-h-full w-full flex items-center gap-3 bg-[#0d1314] border border-border px-3 py-2 rounded-md">
+        <div className="min-h-1/3 w-full flex items-center gap-3 bg-[#0d1314] border border-border px-3 py-2 rounded-md">
           <textarea
             placeholder='{"key": "value"}'
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="w-full mt-2 bg-[#0d1314] border-border p-2 text-sm"
+            className="w-full mt-2 bg-[#0d1314] border-border p-2 text-sm h-full"
           />
         </div>
       )}

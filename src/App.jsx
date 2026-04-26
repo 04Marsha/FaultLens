@@ -3,8 +3,12 @@ import ControlPanel from "./components/ControlPanel";
 import RequestMonitor from "./components/RequestMonitor";
 import RequestBuilder from "./components/RequestBuilder";
 import RequestInspector from "./components/RequestInspector";
+import { useState } from "react";
+import SavedRequestsPanel from "./components/SavedRequestsPanel";
 
 function App() {
+  const [showSaved, setShowSaved] = useState(false);
+
   return (
     <div className="h-screen bg-surface text-body flex flex-col overflow-hidden">
       <div className="h-0.5 bg-acid shrink-0" />
@@ -16,9 +20,15 @@ function App() {
             Fault<span className="text-acid">Lens</span>
           </h1>
         </div>
+        <button
+          onClick={() => setShowSaved(true)}
+          className="px-2 py-1.5 border border-acid text-[18px] text-acid font-mono cursor-pointer"
+        >
+          SAVED REQUESTS
+        </button>
       </header>
 
-      <div className="flex-1 relative overflow-hidden flex items-center justify-center">
+      <div className="flex-1 relative overflow-hidden flex justify-center items-start mt-20">
         <div
           className="absolute inset-0"
           style={{
@@ -28,7 +38,7 @@ function App() {
           }}
         />
 
-        <div className="relative z-10 w-full flex justify-center">
+        <div className="relative z-10 h-full w-full flex justify-center">
           <RequestBuilder />
         </div>
       </div>
@@ -63,11 +73,12 @@ function App() {
           style={{
             backgroundImage:
               "linear-gradient(rgba(212,255,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,255,0,0.04) 1px,transparent 1px)",
-            backgroundSize: "40px 40px", 
+            backgroundSize: "40px 40px",
           }}
         />
         <RequestInspector />
       </div>
+      {showSaved && <SavedRequestsPanel onClose={() => setShowSaved(false)} />}
       <div className="h-0.5 bg-acid shrink-0" />
     </div>
   );
