@@ -31,6 +31,7 @@ export async function chaosFetch(url, options = {}) {
   let errorMessage = null;
   let httpStatus = null;
   let response = null;
+  let parsedData = null;
 
   try {
     if (isOffline) {
@@ -67,14 +68,28 @@ export async function chaosFetch(url, options = {}) {
             headers: { "Content-Type": "application/json" },
           },
         );
-
-        return response;
       }
 
       throw new Error(randomFailure);
     }
 
     response = await fetch(url, options);
+
+    const clonedResponse = response.clone();
+
+    try {
+      const contentType = clonedResponse.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        parsedData = await clonedResponse.json();
+      } else {
+        parsedData = await clonedResponse.text();
+      }
+    } catch {
+      parsedData = null;
+    }
+    console.log("PARSED DATA:", parsedData);
+
     httpStatus = response.status;
 
     if (!response.ok) {
@@ -93,17 +108,64 @@ export async function chaosFetch(url, options = {}) {
 
     console.log("ADDING LOG");
 
-    addLog({
+    const newLog = {
       id: crypto.randomUUID(),
       url,
       method: options.method || "GET",
       headers: options.headers || {},
-      body: options.body || null,
+      body: (() => {
+        if (!options.body) return null;
+        try {
+          return JSON.parse(options.body);
+        } catch {
+          return options.body;
+        }
+      })(),
       status: httpStatus ?? (status === "error" ? "ERR" : "OK"),
       errorMessage,
-      response: response ? await safeParse(response) : null,
+      response:
+        parsedData && typeof parsedData === "object"
+          ? parsedData
+          : { data: parsedData },
       time: endTime - startTime,
       timestamp: new Date().toLocaleTimeString(),
-    });
+      timeline: [
+        {
+          label: "Request Sent",
+          type: "info",
+        },
+
+        latency > 0 && {
+          label: `Artificial Delay: ${latency}ms`,
+          type: "warning",
+        },
+
+        isOffline && {
+          label: "Offline Mode Enabled",
+          type: "error",
+        },
+
+        errorMessage && {
+          label: errorMessage,
+          type: "error",
+        },
+
+        httpStatus && {
+          label: `Response Received (${httpStatus})`,
+          type: httpStatus >= 200 && httpStatus < 300 ? "success" : "error",
+        },
+
+        {
+          label: `Total Time: ${endTime - startTime}ms`,
+          type: "info",
+        },
+      ].filter(Boolean),
+    };
+
+    addLog(newLog);
+
+    setTimeout(() => {
+      useChaosStore.getState().setSelectedLog(newLog);
+    }, 0);
   }
 }

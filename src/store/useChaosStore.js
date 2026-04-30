@@ -19,11 +19,8 @@ const useChaosStore = create((set) => ({
   logs: [],
   selectedLog: null,
 
-  // setMethod: (method) =>
-  //   set(() => ({
-  //     method,
-  //     body: method === "GET" ? "" : "",
-  //   })),
+  toast: null,
+
   setUrl: (url) => set({ url: url }),
   setMethod: (method) => set({ method }),
   setBody: (body) => set({ body }),
@@ -58,6 +55,13 @@ const useChaosStore = create((set) => ({
     set((state) => ({
       logs: [log, ...state.logs],
     })),
+
+  setToast: (message, type = "info") =>
+    set({
+      toast: { message, type, id: Date.now() },
+    }),
+
+  clearToast: () => set({ toast: null }),
 
   clearLogs: () => set({ logs: [] }),
 }));

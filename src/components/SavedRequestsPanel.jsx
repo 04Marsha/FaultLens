@@ -15,12 +15,17 @@ export default function SavedRequestsPanel({ onClose }) {
     deleteSavedRequest,
   } = useChaosStore();
 
+  const setToast = useChaosStore((s) => s.setToast);
+
   return (
     <div className="fixed inset-0 bg-black/70 flex justify-center items-start top-30 z-50">
       <div className="pointer-events-auto w-[80%] max-w-6xl bg-[#0d1314] border border-border rounded p-4">
         <div className="flex justify-between mb-4">
           <h2 className="text-acid font-display text-[28px]">Saved Requests</h2>
-          <button onClick={onClose} className="cursor-pointer font-mono text-warn">
+          <button
+            onClick={onClose}
+            className="cursor-pointer font-mono text-warn"
+          >
             Close
           </button>
         </div>
@@ -42,6 +47,7 @@ export default function SavedRequestsPanel({ onClose }) {
 
                   if (confirm("Delete this request?")) {
                     deleteSavedRequest(req.id);
+                    setToast("Request Deleted", "error");
                   }
                 }}
                 className="
@@ -67,6 +73,7 @@ export default function SavedRequestsPanel({ onClose }) {
                   setMethod(req.method);
                   setBody(req.body || "");
                   setHeaders(req.headers || "");
+                  setToast("Request Loaded", "success");
 
                   setTimeout(() => onClose(), 0);
                 }}

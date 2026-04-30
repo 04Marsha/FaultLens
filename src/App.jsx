@@ -5,6 +5,7 @@ import RequestBuilder from "./components/RequestBuilder";
 import RequestInspector from "./components/RequestInspector";
 import { useState } from "react";
 import SavedRequestsPanel from "./components/SavedRequestsPanel";
+import Toast from "./components/Toast";
 
 function App() {
   const [showSaved, setShowSaved] = useState(false);
@@ -80,6 +81,7 @@ function App() {
       </div>
       {showSaved && <SavedRequestsPanel onClose={() => setShowSaved(false)} />}
       <div className="h-0.5 bg-acid shrink-0" />
+      <Toast />
     </div>
   );
 }

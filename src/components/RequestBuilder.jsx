@@ -35,6 +35,7 @@ export default function RequestBuilder() {
     setBody,
     setHeaders,
     addSavedRequest,
+    setToast
   } = useChaosStore();
 
   const handleSave = () => {
@@ -48,6 +49,7 @@ export default function RequestBuilder() {
       headers,
       createdAt: new Date().toLocaleDateString(),
     });
+    setToast("Request Saved", "success");
   };
 
   return (
@@ -74,7 +76,7 @@ export default function RequestBuilder() {
         <TestButton />
         <button
           onClick={handleSave}
-          className="px-2 py-1.5 border border-acid text-acid hover:bg-acid/10 font-mono"
+          className="px-2 py-1.5 border border-acid text-acid hover:bg-acid/10 font-mono cursor-pointer"
         >
           SAVE REQUEST
         </button>

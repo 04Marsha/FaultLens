@@ -38,7 +38,6 @@ export default function RequestMonitor() {
         </span>
         <div className="flex flex-row gap-7 items-center justify-center">
           <div className="flex gap-4 px-7 py-2 border-b border-border bg-[#0d1314]">
-            {/* Search */}
             <input
               type="text"
               placeholder="Search URL..."
@@ -47,7 +46,6 @@ export default function RequestMonitor() {
               className="flex-1 bg-black/40 px-2 py-1 text-[12px] outline-none w-2xl"
             />
 
-            {/* Method filter */}
             <select
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
@@ -60,7 +58,6 @@ export default function RequestMonitor() {
               <option value="DELETE">DELETE</option>
             </select>
 
-            {/* Status filter */}
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}

@@ -3,6 +3,7 @@ import useChaosStore from "../store/useChaosStore";
 
 export default function TestButton() {
   const { url, method, body, headers } = useChaosStore();
+  const setToast = useChaosStore((s) => s.setToast);
 
   const testAPI = async () => {
     if (!url) {
@@ -25,7 +26,10 @@ export default function TestButton() {
 
     const options = {
       method,
-      headers: parsedHeaders,
+      headers: {
+        "Content-Type": "application/json",
+        ...parsedHeaders,
+      },
     };
 
     try {
@@ -49,19 +53,16 @@ export default function TestButton() {
         options.body = body;
       }
 
-      const res = await chaosFetch(url, options);
+      let res;
 
-      let data;
+      try {
+        res = await chaosFetch(url, options);
 
-      const contentType = res.headers.get("content-type");
-
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        data = await res.text();
+        setToast("Request Sent", "success");
+      } catch (err) {
+        setToast("Request Failed", "error");
+        return;
       }
-
-      console.log("Response:", data);
     } catch (err) {
       console.error(err.message);
     }
