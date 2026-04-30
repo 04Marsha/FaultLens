@@ -109,7 +109,7 @@ export default function RequestInspector() {
 
       <div className="flex flex-row w-full">
         <div className="flex flex-col w-1/4 max-h-11/12">
-          <div className="flex-1 overflow-auto p-4 text-xs text-light font-mono">
+          <div className="flex-1 overflow-scroll h-full p-4 text-xs text-light font-mono">
             <div className="mb-3">
               <span className="text-acid">Status:</span> {selectedLog.status}
             </div>

@@ -93,7 +93,7 @@ export default function RequestMonitor() {
           <div
             key={log.id}
             onClick={() => setSelectedLog(log)}
-            className={`grid grid-cols-5 px-4 py-2 border-b border-border/40 cursor-pointer transition-colors duration-100 items-center
+            className={`grid grid-cols-5 px-4 py-1 border-b border-border/40 cursor-pointer transition-colors duration-100 items-center
               ${selectedLog?.id === log.id ? "bg-acid/10" : "hover:bg-[#0d1314]"}`}
           >
             <span

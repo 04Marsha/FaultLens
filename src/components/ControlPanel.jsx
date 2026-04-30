@@ -11,14 +11,14 @@ export default function ControlPanel() {
   } = useChaosStore();
 
   return (
-    <div className="p-5 space-y-5 bg-surface h-full">
+    <div className="p-5 space-y-2 bg-surface h-full">
       <h2 className="text-base tracking-[0.15em] uppercase text-body font-display">
         Chaos Controls
       </h2>
 
       <div className="space-y-1.5">
         <div className="flex justify-between items-center">
-          <label className="text-[14px] tracking-[0.22em] uppercase text-light">
+          <label className="text-[12px] tracking-[0.22em] uppercase text-light">
             Latency
           </label>
           <span className="text-[14px] text-acid font-display">
@@ -37,7 +37,7 @@ export default function ControlPanel() {
 
       <div className="space-y-1.5">
         <div className="flex justify-between items-center">
-          <label className="text-[14px] tracking-[0.22em] uppercase text-light">
+          <label className="text-[12px] tracking-[0.22em] uppercase text-light">
             Error Rate
           </label>
           <span className="text-[14px] text-acid font-display">
@@ -54,13 +54,13 @@ export default function ControlPanel() {
         />
       </div>
 
-      <div className="flex items-center justify-between">
-        <span className="text-[14px] tracking-[0.22em] uppercase text-light">
-          Offline Mode
+      <div className="flex items-center gap-3">
+        <span className="text-[12px] tracking-[0.22em] uppercase text-light">
+          Offline Mode :
         </span>
         <button
           onClick={toggleOffline}
-          className={`px-4 py-1 font-display text-[14px] tracking-[0.15em] border transition-all duration-150 active:scale-95
+          className={`px-2 py-0.7 font-display text-[12px] tracking-[0.15em] border transition-all duration-150 active:scale-95
         ${
           isOffline
             ? "bg-danger/10 text-danger border-danger/30 hover:bg-danger/20"
