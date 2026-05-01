@@ -1,4 +1,7 @@
-# 🚀 FaultLens — Chaos-Enabled API Testing & Debugging Tool
+<h1>
+  <img src="./public/faultlens.svg" width="52" style="vertical-align: middle; margin-right: 8px;" />
+  FaultLens — Chaos-Enabled API Testing & Debugging Tool
+</h1>
 
 FaultLens is a frontend-focused API debugging tool designed to simulate real-world failure scenarios such as latency, network errors, and server failures. It enables developers to test how their applications behave under adverse conditions — without modifying backend systems.
 
