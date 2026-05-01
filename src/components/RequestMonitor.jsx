@@ -1,5 +1,6 @@
 import useChaosStore from "../store/useChaosStore";
 import { getStatusText } from "../utils/statusMapper";
+import { MethodSelect } from "./MethodSelect";
 
 export default function RequestMonitor() {
   const {
@@ -32,57 +33,53 @@ export default function RequestMonitor() {
 
   return (
     <div className="h-full flex flex-col bg-surface text-xs font-mono">
-      <div className="flex justify-between items-center px-4 py-2 border-b border-border">
-        <span className="text-[16px] tracking-[0.22em] uppercase text-light font-display">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 px-3 py-2 border-b border-border">
+        <span className="text-sm md:text-[16px] tracking-[0.22em] uppercase text-light font-display shrink-0">
           Network Monitor
         </span>
-        <div className="flex flex-row gap-7 items-center justify-center">
-          <div className="flex gap-4 px-7 py-2 border-b border-border bg-[#0d1314]">
+
+        <div className="flex flex-1 items-center gap-2 flex-wrap">
+          <div className="flex flex-1 items-center gap-2 min-w-0 bg-[#0d1314] px-2 py-1 border-b border-border">
             <input
               type="text"
               placeholder="Search URL..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 bg-black/40 px-2 py-1 text-[12px] outline-none w-2xl"
+              className="flex-1 bg-black/40 px-2 py-1 text-[11px] md:text-[12px] outline-none min-w-0"
             />
 
-            <select
+            <MethodSelect
               value={methodFilter}
-              onChange={(e) => setMethodFilter(e.target.value)}
-              className="bg-panel text-acid font-display outline-none text-[18px]"
-            >
-              <option value="ALL">ALL</option>
-              <option value="GET">GET</option>
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="DELETE">DELETE</option>
-            </select>
+              onChange={setMethodFilter}
+              options={["ALL", "GET", "POST", "PUT", "DELETE"]}
+            />
 
-            <select
+            <MethodSelect
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-panel text-acid font-display outline-none text-[18px]"
-            >
-              <option value="ALL">ALL</option>
-              <option value="SUCCESS">SUCCESS</option>
-              <option value="ERROR">ERROR</option>
-            </select>
+              onChange={setStatusFilter}
+              options={[
+                { value: "ALL", label: "ALL" },
+                { value: "SUCCESS", label: "SUCCESS" },
+                { value: "ERROR", label: "ERROR" },
+              ]}
+            />
           </div>
+
           <button
             onClick={clearLogs}
-            className="text-[14px] tracking-[0.15em] uppercase text-danger/50 hover:text-danger transition-colors duration-150 font-display"
+            className="text-[12px] md:text-[14px] tracking-[0.15em] uppercase text-danger/50 hover:text-danger transition-colors duration-150 font-display shrink-0"
           >
             Clear
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-5 px-4 py-2 border-b border-border">
+      <div className="flex-1 overflow-y-auto overflow-x-auto">
+        <div className="hidden sm:grid sm:grid-cols-[90px_70px_1fr_70px_1fr] px-3 py-1.5 border-b border-border">
           {["Status", "Method", "URL", "Time", "Info"].map((col) => (
             <span
               key={col}
-              className="text-[12px] tracking-[0.22em] uppercase text-light"
+              className="text-[10px] md:text-[12px] tracking-[0.22em] uppercase text-light"
             >
               {col}
             </span>
@@ -93,11 +90,11 @@ export default function RequestMonitor() {
           <div
             key={log.id}
             onClick={() => setSelectedLog(log)}
-            className={`grid grid-cols-5 px-4 py-1 border-b border-border/40 cursor-pointer transition-colors duration-100 items-center
-              ${selectedLog?.id === log.id ? "bg-acid/10" : "hover:bg-[#0d1314]"}`}
+            className={`flex flex-col sm:grid sm:grid-cols-[90px_70px_1fr_70px_1fr] px-3 py-1.5 border-b border-border/40 cursor-pointer transition-colors duration-100 gap-0.5 sm:gap-0 sm:items-center
+          ${selectedLog?.id === log.id ? "bg-acid/10" : "hover:bg-[#0d1314]"}`}
           >
             <span
-              className={`text-[16px] tracking-widest uppercase font-display ${
+              className={`text-[12px] md:text-[13px] tracking-widest uppercase font-display ${
                 typeof log.status === "number"
                   ? log.status >= 200 && log.status < 300
                     ? "text-acid"
@@ -107,13 +104,16 @@ export default function RequestMonitor() {
                   : "text-danger"
               }`}
             >
+              <span className="sm:hidden text-light/40 text-[10px] mr-1">
+                STATUS{" "}
+              </span>
               {typeof log.status === "number"
                 ? `${log.status} ${getStatusText(log.status)}`
                 : "ERR"}
             </span>
 
             <span
-              className={`text-[16px] tracking-widest font-display
+              className={`text-[12px] md:text-[13px] tracking-widest font-display
             ${
               log.method === "GET"
                 ? "text-acid"
@@ -124,18 +124,30 @@ export default function RequestMonitor() {
                     : "text-body"
             }`}
             >
+              <span className="sm:hidden text-light/40 text-[10px] mr-1">
+                METHOD{" "}
+              </span>
               {log.method}
             </span>
 
-            <span className="truncate text-light">{log.url}</span>
+            <span className="truncate text-light text-[11px] md:text-xs">
+              {log.url}
+            </span>
 
             <span className="text-body">
-              <span className="text-[13px] font-display">{log.time}</span>
-              <span className="text-[13px] text-light ml-0.5"> ms</span>
+              <span className="sm:hidden text-light/40 text-[10px] mr-1">
+                TIME{" "}
+              </span>
+              <span className="text-[11px] md:text-[13px] font-display">
+                {log.time}
+              </span>
+              <span className="text-[11px] md:text-[13px] text-light ml-0.5">
+                ms
+              </span>
             </span>
 
             <span
-              className={`truncate ${
+              className={`truncate text-[11px] md:text-xs ${
                 typeof log.status === "number" && log.status >= 400
                   ? "text-danger"
                   : log.errorMessage

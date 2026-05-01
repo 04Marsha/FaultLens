@@ -72,18 +72,20 @@ export default function TestButton() {
     <button
       onClick={testAPI}
       className="
-        flex items-center gap-2
-        px-2 py-1.5
-        bg-acid text-surface
-        text-[18px] tracking-[0.2em] uppercase
-        border border-acid
-        hover:bg-transparent hover:text-acid
-        active:scale-95
-        transition-all duration-150 font-display cursor-pointer
-      "
+    flex items-center gap-2
+    px-2 py-1
+    bg-acid text-surface
+    text-[12px] md:text-[14px] tracking-[0.2em] uppercase
+    border border-acid
+    hover:bg-transparent hover:text-acid
+    active:scale-95
+    transition-all duration-150 font-display cursor-pointer
+    whitespace-nowrap
+  "
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current" />
-      Send Request
+      <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0" />
+      <span className="hidden sm:inline">Send Request</span>
+      <span className="sm:hidden">Send</span>
     </button>
   );
 }
